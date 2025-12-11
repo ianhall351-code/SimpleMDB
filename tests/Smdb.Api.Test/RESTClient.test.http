@@ -1,0 +1,81 @@
+### Movies REST Client
+### Save this as movies.http and use with the VS Code REST Client extension
+
+@host = http://localhost:8080
+@apiVersion = v1
+@moviesBase = {{host}}/api/{{apiVersion}}/movies
+@movieId = 1
+
+########################################################
+### 1. Read paged list of movies
+### Equivalent to:
+### curl.exe -X GET "http://localhost:8080/api/v1/movies?page=1&size=10"
+########################################################
+
+GET {{moviesBase}}?page=1&size=10
+Accept: application/json
+
+###
+
+########################################################
+### 2. Create a new movie
+### Equivalent to:
+### curl.exe -X POST "http://localhost:8080/api/v1/movies" ^
+###   -H "Content-Type: application/json" ^
+###   -d "{ \"id\": -1, \"title\": \"Inception\", \"year\": 2010, \"description\": \"A skilled thief who enters dreams to steal secrets.\" }"
+########################################################
+
+POST {{moviesBase}}
+Content-Type: application/json
+Accept: application/json
+
+{
+  "id": -1,
+  "title": "Inception",
+  "year": 2010,
+  "description": "A skilled thief who enters dreams to steal secrets."
+}
+
+###
+
+########################################################
+### 3. Read a single movie by id
+### Equivalent to:
+### curl.exe -X GET "http://localhost:8080/api/v1/movies/1"
+########################################################
+
+GET {{moviesBase}}/{{movieId}}
+Accept: application/json
+
+###
+
+########################################################
+### 4. Update an existing movie
+### Equivalent to:
+### curl.exe -X PUT "http://localhost:8080/api/v1/movies/1" ^
+###   -H "Content-Type: application/json" ^
+###   -d "{ \"title\": \"Joker 2\", \"year\": 2020, \"description\": \"A man that is a joke.\" }"
+########################################################
+
+PUT {{moviesBase}}/{{movieId}}
+Content-Type: application/json
+Accept: application/json
+
+{
+  "title": "Joker 2",
+  "year": 2020,
+  "description": "A man that is a joke."
+}
+
+###
+
+########################################################
+### 5. Delete a movie
+### Equivalent to:
+### curl.exe -X DELETE "http://localhost:8080/api/v1/movies/1"
+########################################################
+
+DELETE {{moviesBase}}/{{movieId}}
+Accept: application/json
+
+###

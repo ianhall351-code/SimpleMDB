@@ -1,7 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <ItemGroup>
     <ProjectReference Include="..\..\..\SharedLibrary\src\Shared\Shared.csproj" />
     <ProjectReference Include="..\Smdb.Core\Smdb.Core.csproj" />
+    <ProjectReference Include="..\Smdb.Api\Smdb.Api.csproj" />
   </ItemGroup>
 
   <PropertyGroup>
@@ -10,4 +12,5 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
+
 </Project>

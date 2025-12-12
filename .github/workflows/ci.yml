@@ -1,3 +1,4 @@
+
 name: CI-CD
 
 on:
@@ -14,24 +15,40 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      # 1) Checkout del repo SimpleMDB dentro de ./SimpleMDB
+      - name: Checkout SimpleMDB
         uses: actions/checkout@v4
+        with:
+          path: SimpleMDB
 
+      # 2) Checkout del SharedLibrary (PUBLICO) al lado, en ./SharedLibrary
+      - name: Checkout SharedLibrary
+        uses: actions/checkout@v4
+        with:
+          repository: ianhall351-code/SharedLibrary
+          path: SharedLibrary
+
+      # 3) .NET (usa 8.0.x para evitar issues; si tu proyecto es net9, lo cambiamos luego)
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: "9.0.x"
+          dotnet-version: "8.0.x"
 
+      # 4) Restore/Build/Test desde SimpleMDB (que es donde está la .sln)
       - name: Restore
+        working-directory: SimpleMDB
         run: dotnet restore
 
       - name: Build
+        working-directory: SimpleMDB
         run: dotnet build --no-restore
 
       - name: Test
+        working-directory: SimpleMDB
         run: dotnet test --no-build
 
       - name: Publish API
+        working-directory: SimpleMDB
         run: dotnet publish src/Smdb.Api/Smdb.Api.csproj -c Release -o publish
 
       - name: Login to GHCR
@@ -42,6 +59,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build & Push Docker image
+        working-directory: SimpleMDB
         run: |
           docker build -t ghcr.io/${{ github.actor }}/smdb-api:${{ github.sha }} .
           docker push ghcr.io/${{ github.actor }}/smdb-api:${{ github.sha }}
